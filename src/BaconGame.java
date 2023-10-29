@@ -11,7 +11,7 @@ public class BaconGame {
 
     private static int getConnectionsToCenter(){ // this doesn't really work, i think because it counts ALL edges even
         // if they connect the same vertices (i.e. actors were in the same movie multiple times)
-        return BaconGraphLib.getSumOfEdgesToEachChild(bfsGraph, currentCenter, 0);
+        return 9235-BaconGraphLib.missingVertices(baconGraph.graph, bfsGraph).size();
     }
 
     private static double getAvgSeparation(){
