@@ -11,10 +11,15 @@ public class BaconGraph {
     private Map<String, Set<String>> moviesToActors;
 
 
+    public int getAmountOfActors(){
+        return actorIDs.size();
+    }
+
+
     public void setActorIDs(){
         actorIDs = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/actorsTest.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("inputs/actors.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");
@@ -29,7 +34,7 @@ public class BaconGraph {
     public void setMovieIDs() {
         movieIDs = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/moviesTest.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("inputs/movies.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");
@@ -45,7 +50,7 @@ public class BaconGraph {
     public void setMoviesToActors() {
         moviesToActors = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/movie-actorsTest.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("inputs/movie-actors.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");

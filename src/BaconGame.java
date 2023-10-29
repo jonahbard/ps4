@@ -9,20 +9,18 @@ public class BaconGame {
     static AdjacencyMapGraph bfsGraph;
     static String currentCenter = "Kevin Bacon";
 
-    private static int getConnectionsToCenter(){
-        //return BaconGraphLib.getSumOfEdgesToEachChild(baconGraph.graph, currentCenter, 0);
-        return 0;
+    private static int getConnectionsToCenter(){ // this doesn't really work, i think because it counts ALL edges even
+        // if they connect the same vertices (i.e. actors were in the same movie multiple times)
+        return BaconGraphLib.getSumOfEdgesToEachChild(bfsGraph, currentCenter, 0);
     }
 
-    private static double getAvgSeparationFromCenter(){
-        //return BaconGraphLib.averageSeparation(baconGraph.graph, currentCenter);
-        return 0;
-
+    private static double getAvgSeparation(){
+        return BaconGraphLib.averageSeparation(bfsGraph, currentCenter);
     }
 
     private static void printCurrentCenterDialog(){
         System.out.println(currentCenter + " is now the center of the acting universe, connected to " +
-                getConnectionsToCenter() + "/9235 actors with average separation "+ getAvgSeparationFromCenter());
+                getConnectionsToCenter() + "/9235 actors with average separation "+ getAvgSeparation());
     }
 
     private static void printPathFromName(String name){
@@ -33,7 +31,7 @@ public class BaconGame {
         }
     }
 
-    private static void runGame(){
+    private static void runGame(){ // should add input validation here
         boolean gameRunning = true;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Game starting!");
@@ -58,6 +56,7 @@ public class BaconGame {
         //make the graph
         baconGraph = new BaconGraph();
         bfsGraph = (AdjacencyMapGraph) BaconGraphLib.bfs(baconGraph.graph, currentCenter);
+        System.out.println(bfsGraph);
         runGame();
 
     }
