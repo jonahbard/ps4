@@ -2,6 +2,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Code to test the graph library using a hard coded, not file read, small test graph shown on the pset page
+ * @author Jonah Bard, Daniel Katz
+ */
+
 public class BaconGraphLibTestDriver {
     public static void main(String[] args) {
         Graph<String, Set<String>> g = new AdjacencyMapGraph<>();
@@ -30,8 +35,8 @@ public class BaconGraphLibTestDriver {
         g.insertUndirected("Nobody", "Nobody’s Friend", new HashSet<>(Arrays.asList(fMovie)));
 
         Graph<String, Set<String>> bfsTree =  BaconGraphLib.bfs(g, "Kevin Bacon");
-        System.out.println(bfsTree);
 
+        System.out.println(bfsTree);
         System.out.println(BaconGraphLib.getPath(bfsTree, "Dartmouth (Earl thereof)"));
         System.out.println(BaconGraphLib.averageSeparation(bfsTree, "Kevin Bacon"));
     }
