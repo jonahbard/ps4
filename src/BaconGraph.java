@@ -5,21 +5,29 @@ import java.util.*;
 public class BaconGraph {
 
     //
-    public AdjacencyMapGraph graph;
+    private Graph<String, Set<String>> graph;
     private Map<Integer, String> actorIDs;
     private Map<Integer, String> movieIDs;
     private Map<String, Set<String>> moviesToActors;
 
+    private final boolean testing;
 
-    public int getAmountOfActors(){
-        return actorIDs.size();
+    public BaconGraph(boolean testing) {
+        this.testing = testing;
+
+        setActorIDs();
+        setMovieIDs();
+        setMoviesToActors();
+        createGraph();
     }
 
+    public Graph<String, Set<String>> getGraph() { return graph;}
 
-    public void setActorIDs(){
+
+    private void setActorIDs(){
         actorIDs = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/actors.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(testing ? "inputs/actorsTest.txt" : "inputs/actors.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");
@@ -27,14 +35,14 @@ public class BaconGraph {
             }
             br.close();
         } catch(Exception e) {
-            System.out.println("fuck");
+            e.printStackTrace();
         }
     }
 
-    public void setMovieIDs() {
+    private void setMovieIDs() {
         movieIDs = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/movies.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(testing ? "inputs/moviesTest.txt" : "inputs/movies.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");
@@ -42,15 +50,15 @@ public class BaconGraph {
             }
             br.close();
         } catch(Exception e) {
-            System.out.println("fuck");
+            e.printStackTrace();
         }
     }
 
 
-    public void setMoviesToActors() {
+    private void setMoviesToActors() {
         moviesToActors = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader("inputs/movie-actors.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(testing ? "inputs/movie-actorsTest.txt": "inputs/movie-actors.txt"));
             String line;
             while ((line = br.readLine()) != null){
                 String[] split = line.split("\\|");
@@ -66,11 +74,11 @@ public class BaconGraph {
             }
             br.close();
         } catch(Exception e) {
-            System.out.println("fuck");
+            e.printStackTrace();
         }
     }
 
-    public void createGraph(){
+    private void createGraph(){
         graph = new AdjacencyMapGraph<>();
 
         //insert all actors as vertices
@@ -79,30 +87,26 @@ public class BaconGraph {
         }
         //insert all edges
         for (String movie : moviesToActors.keySet()) { // for each movie
-            for (Object actor1 : moviesToActors.get(movie)) { // for each actor in movie
-                //for every other actor, add undirected edge labeled with movie
-                for (Object actor2 : moviesToActors.get(movie)) {
-                    if (!actor2.equals(actor1)) {
-                        graph.insertUndirected(actor1, actor2, movie);
+            ArrayList<String> actorsInMovies = new ArrayList<>(moviesToActors.get(movie));
+
+            for(int i = 0; i < actorsInMovies.size() - 1; i++) {
+                for(int j = i+1; j < actorsInMovies.size(); j++) {
+                    String actor1 = actorsInMovies.get(i), actor2 = actorsInMovies.get(j);
+                    if (graph.hasEdge(actor1, actor2)) {
+                        graph.getLabel(actor1, actor2).add(movie);
+                    } else {
+                        Set<String> newEdge = new HashSet<>();
+                        newEdge.add(movie);
+                        graph.insertUndirected(actor1, actor2, newEdge);
                     }
                 }
             }
+
         }
     }
 
-    // TODO: Does just the graph live here or also the methods to drive the game
-
-    // TODO: Create the code to instantiate the graph based on the input files
-    public BaconGraph() {
-        setActorIDs();
-        setMovieIDs();
-        setMoviesToActors();
-        createGraph();
-    }
-
-
     public static void main(String[] args) {
-        BaconGraph baconGraph = new BaconGraph();
+        BaconGraph baconGraph = new BaconGraph(true);
         System.out.println(baconGraph.graph);
     }
 

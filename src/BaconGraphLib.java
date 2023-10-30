@@ -42,7 +42,7 @@ public class BaconGraphLib {
         V currentV = v;
         while (tree.inDegree(currentV) == 1) {
             for (V parentV: tree.inNeighbors(currentV)) {
-                path.add(0, parentV);
+                path.add(parentV);
                 currentV = parentV;
             }
         }
@@ -70,15 +70,15 @@ public class BaconGraphLib {
      * @param <E>
      */
     public static <V,E> double averageSeparation(Graph<V,E> tree, V root) {
-        double numberOfEdges = getSumOfEdgesToEachChild(tree, root, 0);
+        double numberOfEdges = getPathSum(tree, root, 0);
         return numberOfEdges / (double) (tree.numVertices() - 1);
 
     }
 
-    public static <V,E> int getSumOfEdgesToEachChild(Graph<V,E> tree, V parent, int depth) {
+    private static <V,E> int getPathSum(Graph<V,E> tree, V parent, int depth) {
         int sum = depth;
         for (V v : tree.outNeighbors(parent)) {
-            sum += getSumOfEdgesToEachChild(tree, v, depth + 1);
+            sum += getPathSum(tree, v, depth + 1);
         }
         return sum;
     }
