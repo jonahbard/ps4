@@ -116,7 +116,7 @@ public class BaconGraphLib {
     }
 
     /**
-     * Helper method to recursively traverse the tree while keeping track of exisitng distance
+     * Helper method to recursively traverse the tree while keeping track of existing distance
      * @param tree
      * @param parent
      * @param depth

@@ -233,12 +233,12 @@ public class BaconGame {
                     printTopCenters(Integer.parseInt(n.substring(2))); // extract number
                 } else if (n.startsWith("d ")) {
                     String[] parts = n.substring(2).split(" "); // extract numbers
-                    if (parts.length != 2) throw new Exception("invalid numbers");
+                    if (parts.length != 2) throw new Exception("invalid numbers"); // force retry if wrong format
                     int low = Integer.parseInt(parts[0]), high = Integer.parseInt(parts[1]);
                     printActorsByDegree(low, high);
                 } else if (n.startsWith("s ")) {
                     String[] parts = n.substring(2).split(" ");  // extract numbers
-                    if (parts.length != 2) throw new Exception("invalid numbers");
+                    if (parts.length != 2) throw new Exception("invalid numbers"); // force retry if wrong format
                     int low = Integer.parseInt(parts[0]), high = Integer.parseInt(parts[1]);
                     printActorsBySeparation(low, high);
                 } else {
