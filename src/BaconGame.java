@@ -11,6 +11,7 @@ public class BaconGame {
     Graph<String, Set<String>> bfsGraph;
     String currentCenter = "Kevin Bacon";
 
+    // This boolean determines what data set is used for the live run of the game.
     private static final boolean testing = false;
 
     /**
@@ -18,7 +19,7 @@ public class BaconGame {
      * @return
      */
     private int getConnectionsToCenter(){
-        return bfsGraph.numVertices();
+        return bfsGraph.numVertices() - 1;
     }
 
     /**
@@ -126,7 +127,7 @@ public class BaconGame {
         // For the number of centers inputted, print that many while ensuring there are enough to do so
         for(int i = 0; i < Math.abs(numCenters) && !pq.isEmpty(); i++) {
             String actor = pq.poll();
-            System.out.println(actor + ": average seperation " + actorToAvgPathLength.get(actor));
+            System.out.println(actor + ": average separation " + actorToAvgPathLength.get(actor));
         }
     }
 
@@ -135,7 +136,7 @@ public class BaconGame {
      * Print actors which are not in the same network as the current center of the universe
      */
     public void printInfiniteSeperationActors() {
-        System.out.println("actors with infinite seperation: ");
+        System.out.println("actors with infinite separation: ");
         for (String actor : BaconGraphLib.missingVertices(baconGraph.getGraph(), bfsGraph)) {
             System.out.println(actor);
         }
@@ -163,7 +164,7 @@ public class BaconGame {
         System.out.println("Actors sorted by degree decrementally bound by selected high and low");
         while (!pq.isEmpty()) {
             String actor = pq.poll();
-            System.out.println(actor);
+            System.out.println(actor + ": out degree " + baconGraph.getGraph().outDegree(actor));
         }
     }
 
@@ -227,15 +228,17 @@ public class BaconGame {
                 } else if (n.startsWith("u ")) {
                     changeCenter(n.substring(2)); // extract name
                 } else if (n.startsWith("p ")){
-                    printPathFromName(n.substring(2)); // extract name
+                    printPathFromName(n.substring(2).trim()); // extract name
                 } else if (n.startsWith("c ")) {
                     printTopCenters(Integer.parseInt(n.substring(2))); // extract number
                 } else if (n.startsWith("d ")) {
                     String[] parts = n.substring(2).split(" "); // extract numbers
+                    if (parts.length != 2) throw new Exception("invalid numbers");
                     int low = Integer.parseInt(parts[0]), high = Integer.parseInt(parts[1]);
                     printActorsByDegree(low, high);
                 } else if (n.startsWith("s ")) {
                     String[] parts = n.substring(2).split(" ");  // extract numbers
+                    if (parts.length != 2) throw new Exception("invalid numbers");
                     int low = Integer.parseInt(parts[0]), high = Integer.parseInt(parts[1]);
                     printActorsBySeparation(low, high);
                 } else {
@@ -256,6 +259,16 @@ public class BaconGame {
     public BaconGame() {
         baconGraph = new BaconGraph(testing);
         bfsGraph = BaconGraphLib.bfs(baconGraph.getGraph(), currentCenter);
+    }
+
+    /**
+     * Constructor for testing purposes
+     * @param testParam
+     * @param specificCenter
+     */
+    public BaconGame(boolean testParam, String specificCenter) {
+        baconGraph = new BaconGraph(testParam);
+        bfsGraph = BaconGraphLib.bfs(baconGraph.getGraph(), specificCenter);
     }
 
     /**

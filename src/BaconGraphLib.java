@@ -110,6 +110,7 @@ public class BaconGraphLib {
      */
     public static <V,E> double averageSeparation(Graph<V,E> tree, V root) {
         double numberOfEdges = getPathSum(tree, root, 0);
+        // the -1 is needed to not count the root node
         return numberOfEdges / (double) (tree.numVertices() - 1);
 
     }
